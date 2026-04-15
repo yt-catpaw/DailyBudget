@@ -22,56 +22,96 @@ struct ContentView: View {
     }
     
     var body: some View {
-        VStack(spacing: 20) {
-            Text("月予算設定")
-                .font(.headline)
-            
-            TextField("月の予算を入力", text: $budgetInput)
-                .keyboardType(.numberPad)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.horizontal)
-            
-            Button("予算を設定") {
-                if let value = Double(budgetInput), value > 0 {
-                    monthlyBudget = value
-                    budgetInput = ""
+        ScrollView {
+            VStack(spacing: 24) {
+                // 月予算カード
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("月予算")
+                        .font(.headline)
+
+                    Text("¥\(Int(monthlyBudget))")
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundStyle(.blue.opacity(0.8))
+                    
+                    Divider()
+                        .padding(.vertical, 4)
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("月予算")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+
+                        TextField("例：100000", text: $budgetInput)
+                            .keyboardType(.numberPad)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
+
+                    Button(action: {
+                        if let value = Double(budgetInput), value > 0 {
+                            monthlyBudget = value
+                            budgetInput = ""
+                        }
+                    }) {
+                        Text("予算を設定")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
+                    }
                 }
-            }
-            .padding()
-            .background(Color.green)
-            .foregroundColor(.white)
-            .cornerRadius(10)
-            
-            Text("月予算: ¥\(Int(monthlyBudget))")
-                .font(.subheadline)
-            
-            Divider()
-            
-            Text("今日の予算")
-                .font(.headline)
-            
-            Text("¥\(Int(remainingToday))")
-                .font(.largeTitle)
-                .bold()
-            
-            TextField("使った金額を入力", text: $inputAmount)
-                .keyboardType(.numberPad)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.horizontal)
-            
-            Button("追加") {
-                if let value = Double(inputAmount), value > 0 {
-                    spentToday += value
-                    inputAmount = ""
+                .padding(20)
+                .background(Color.white)
+                .cornerRadius(12)
+                .shadow(radius: 2)
+
+                // 今日の予算カード
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("今日の予算")
+                        .font(.headline)
+
+                    Text("¥\(Int(remainingToday))")
+                        .font(.system(size: 40, weight: .bold))
+                        .foregroundColor(remainingToday >= 0 ? .green : .red)
+                    
+                    Divider()
+                        .padding(.vertical, 4)
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("支出金額")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+
+                        TextField("例：1200", text: $inputAmount)
+                            .keyboardType(.numberPad)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
+
+                    Button(action: {
+                        if let value = Double(inputAmount), value > 0 {
+                            spentToday += value
+                            inputAmount = ""
+                        }
+                    }) {
+                        Text("追加")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
+                    }
                 }
+                .padding(20)
+                .background(Color.white)
+                .cornerRadius(12)
+                .shadow(radius: 2)
             }
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(10)
-            
+            .padding(.vertical, 24)
+            .padding(.horizontal, 16)
         }
-        .padding()
+        .background(Color(.systemGray6))
     }
 }
 
